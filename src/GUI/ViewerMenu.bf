@@ -312,6 +312,19 @@ namespace SpyroScope {
 			recordButton.text = "(R)ecord";
 			recordButton.OnActuated.Add(new => viewerState.RecordReplay);
 
+			// Model loading controls
+			Button loadModelButton = new .();
+			loadModelButton.Anchor = .(0,1,0,0);
+			loadModelButton.Offset = .(0, 0, 4 * WindowApp.font.height, 16 + 4 * WindowApp.font.height);
+			loadModelButton.text = "Load Model";
+			loadModelButton.OnActuated.Add(new => viewerState.LoadModel);
+
+			Button clearLevelButton = new .();
+			clearLevelButton.Anchor = .(0,1,0,0);
+			clearLevelButton.Offset = .(0, 0, 5 * WindowApp.font.height, 16 + 5 * WindowApp.font.height);
+			clearLevelButton.text = "Clear Level";
+			clearLevelButton.OnActuated.Add(new => viewerState.ClearLevel);
+
 			GUIElement.PopParent();
 			GUIElement.PopParent();
 			GUIElement.PopParent();
