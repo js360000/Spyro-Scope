@@ -3,3 +3,7 @@ build/
 dist/*
 !dist/*/
 recovery/
+test_*.obj
+test_*.mtl
+*.obj
+*.mtl
