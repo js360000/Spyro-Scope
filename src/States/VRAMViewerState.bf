@@ -452,7 +452,7 @@ namespace SpyroScope {
 		}
 
 		void ExportVRAM() {
-			let dialog = new SaveFileDialog();
+			let dialog = scope System.IO.SaveFileDialog();
 			dialog.FileName = "vram_decoded";
 			dialog.SetFilter("Bitmap image (*.bmp)|*.bmp|Truevision TGA (*.tga)|*.tga|All files (*.*)|*.*");
 			dialog.OverwritePrompt = true;
@@ -514,7 +514,7 @@ namespace SpyroScope {
 				return;
 			}
 
-			let dialog = scope OpenFileDialog();
+			let dialog = scope System.IO.OpenFileDialog();
 			dialog.SetFilter("Bitmap image (*.bmp)|*.bmp|All files (*.*)|*.*");
 			dialog.CheckFileExists = true;
 			dialog.Multiselect = true;

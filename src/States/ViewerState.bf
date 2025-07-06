@@ -1351,13 +1351,69 @@ namespace SpyroScope {
 			messageFeed.PushMessage("Teleported Spyro to Game Camera");
 		}
 
+		public void LoadModel() {
+			let dialog = scope System.IO.OpenFileDialog();
+			dialog.SetFilter("OBJ Models (*.obj)|*.obj|All files (*.*)|*.*");
+			dialog.CheckFileExists = true;
+			dialog.Multiselect = false;
+
+			switch (dialog.ShowDialog()) {
+				case .Ok(let val):
+					if (val == .OK && dialog.FileNames.Count > 0) {
+						LoadModelFile(dialog.FileNames[0]);
+					}
+				case .Err:
+			}
+		}
+
+		public void ClearLevel() {
+			if (Terrain.collision != null) {
+				Terrain.collision.Clear();
+				messageFeed.PushMessage("Level cleared");
+			}
+		}
+
+		void LoadModelFile(StringView filePath) {
+			let result = ModelLoader.LoadOBJ(filePath);
+			switch (result) {
+				case .Ok(let model):
+					// Position model at camera location
+					model.position = Camera.position;
+					
+					// Load textures for materials
+					for (let material in model.materials) {
+						if (material.HasDiffuseMap) {
+							material.diffuseTextureID = TextureCache.LoadTexture(material.diffuseMapPath);
+						}
+						if (material.HasNormalMap) {
+							material.normalTextureID = TextureCache.LoadTexture(material.normalMapPath);
+						}
+						if (material.HasSpecularMap) {
+							material.specularTextureID = TextureCache.LoadTexture(material.specularMapPath);
+						}
+					}
+					
+					// Insert model into collision system
+					if (Terrain.collision != null) {
+						ModelInserter.InsertModel(model, Terrain.collision);
+						messageFeed.PushMessage(scope String() .. AppendF("Loaded model: {0} ({1} triangles)", model.name, model.GetTriangleCount()));
+					} else {
+						messageFeed.PushMessage("Error: No collision system available");
+					}
+					
+					delete model;
+				case .Err:
+					messageFeed.PushMessage(scope String() .. AppendF("Failed to load model: {0}", Path.GetFileName(filePath)));
+			}
+		}
+
 		void Reload() {
 			Terrain.Reload();
 			Terrain.ReloadAnimations();
 		}
 
 		void ExportTerrain() {
-			let dialog = new SaveFileDialog();
+			let dialog = scope System.IO.SaveFileDialog();
 			dialog.FileName = "terrain";
 			dialog.SetFilter(scope String() .. AppendF("Spyro Terrain (*.{0})|*.{0}|All files (*.*)|*.*", Emulator.active.installment == .SpyroTheDragon ? "s1terrain" : "sterrain"));
 			dialog.OverwritePrompt = true;
@@ -1372,8 +1428,6 @@ namespace SpyroScope {
 					}
 				case .Err:
 			}
-
-			delete dialog;
 		}
 	}
 }

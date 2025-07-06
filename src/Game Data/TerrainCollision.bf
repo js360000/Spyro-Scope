@@ -912,6 +912,11 @@ namespace SpyroScope {
 			Emulator.active.WriteToRAM(collisionGrid, buffer.Ptr, buffer.Count * 2);
 		}
 
+		public void AddTriangle(CollisionTriangle triangle) {
+			triangles.Add(triangle);
+			TriangleCount = (uint32)triangles.Count;
+		}
+
 		public void Clear() {
 			TriangleCount = 0;
 			SpecialTriangleCount = 0;
