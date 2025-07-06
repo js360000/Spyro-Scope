@@ -51,27 +51,30 @@ namespace SpyroScope {
 				case "v":
 					// Vertex
 					if (parts.Count >= 4) {
-						let x = float.Parse(parts[1]);
-						let y = float.Parse(parts[2]);
-						let z = float.Parse(parts[3]);
-						model.vertices.Add(.(x, y, z));
+						if (Float.Parse(parts[1]) case .Ok(let x) &&
+							Float.Parse(parts[2]) case .Ok(let y) &&
+							Float.Parse(parts[3]) case .Ok(let z)) {
+							model.vertices.Add(.(x, y, z));
+						}
 					}
 					
 				case "vn":
 					// Normal
 					if (parts.Count >= 4) {
-						let x = float.Parse(parts[1]);
-						let y = float.Parse(parts[2]);
-						let z = float.Parse(parts[3]);
-						model.normals.Add(.(x, y, z));
+						if (Float.Parse(parts[1]) case .Ok(let x) &&
+							Float.Parse(parts[2]) case .Ok(let y) &&
+							Float.Parse(parts[3]) case .Ok(let z)) {
+							model.normals.Add(.(x, y, z));
+						}
 					}
 					
 				case "vt":
 					// Texture coordinate
 					if (parts.Count >= 3) {
-						let u = float.Parse(parts[1]);
-						let v = float.Parse(parts[2]);
-						model.textureCoords.Add(.(u, v));
+						if (Float.Parse(parts[1]) case .Ok(let u) &&
+							Float.Parse(parts[2]) case .Ok(let v)) {
+							model.textureCoords.Add(.(u, v));
+						}
 					}
 					
 				case "f":
@@ -114,8 +117,9 @@ namespace SpyroScope {
 				}
 				
 				if (components.Count > 0 && !components[0].IsEmpty) {
-					uint32 vertexIndex = uint32.Parse(components[0]) - 1; // OBJ indices are 1-based
-					faceIndices.Add(vertexIndex);
+					if (UInt32.Parse(components[0]) case .Ok(let vertexIndex)) {
+						faceIndices.Add(vertexIndex - 1); // OBJ indices are 1-based
+					}
 				}
 			}
 			
@@ -178,31 +182,47 @@ namespace SpyroScope {
 				case "Ka":
 					// Ambient color
 					if (currentMaterial != null && parts.Count >= 4) {
-						currentMaterial.ambientColor = .(float.Parse(parts[1]), float.Parse(parts[2]), float.Parse(parts[3]));
+						if (Float.Parse(parts[1]) case .Ok(let r) &&
+							Float.Parse(parts[2]) case .Ok(let g) &&
+							Float.Parse(parts[3]) case .Ok(let b)) {
+							currentMaterial.ambientColor = .(r, g, b);
+						}
 					}
 					
 				case "Kd":
 					// Diffuse color
 					if (currentMaterial != null && parts.Count >= 4) {
-						currentMaterial.diffuseColor = .(float.Parse(parts[1]), float.Parse(parts[2]), float.Parse(parts[3]));
+						if (Float.Parse(parts[1]) case .Ok(let r) &&
+							Float.Parse(parts[2]) case .Ok(let g) &&
+							Float.Parse(parts[3]) case .Ok(let b)) {
+							currentMaterial.diffuseColor = .(r, g, b);
+						}
 					}
 					
 				case "Ks":
 					// Specular color
 					if (currentMaterial != null && parts.Count >= 4) {
-						currentMaterial.specularColor = .(float.Parse(parts[1]), float.Parse(parts[2]), float.Parse(parts[3]));
+						if (Float.Parse(parts[1]) case .Ok(let r) &&
+							Float.Parse(parts[2]) case .Ok(let g) &&
+							Float.Parse(parts[3]) case .Ok(let b)) {
+							currentMaterial.specularColor = .(r, g, b);
+						}
 					}
 					
 				case "Ns":
 					// Specular exponent
 					if (currentMaterial != null && parts.Count >= 2) {
-						currentMaterial.specularExponent = float.Parse(parts[1]);
+						if (Float.Parse(parts[1]) case .Ok(let ns)) {
+							currentMaterial.specularExponent = ns;
+						}
 					}
 					
 				case "d", "Tr":
 					// Alpha/transparency
 					if (currentMaterial != null && parts.Count >= 2) {
-						currentMaterial.alpha = float.Parse(parts[1]);
+						if (Float.Parse(parts[1]) case .Ok(let alpha)) {
+							currentMaterial.alpha = alpha;
+						}
 					}
 					
 				case "map_Kd":

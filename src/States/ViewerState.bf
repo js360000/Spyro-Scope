@@ -1352,7 +1352,7 @@ namespace SpyroScope {
 		}
 
 		public void LoadModel() {
-			let dialog = new OpenFileDialog();
+			let dialog = scope System.IO.OpenFileDialog();
 			dialog.SetFilter("OBJ Models (*.obj)|*.obj|All files (*.*)|*.*");
 			dialog.CheckFileExists = true;
 			dialog.Multiselect = false;
@@ -1364,8 +1364,6 @@ namespace SpyroScope {
 					}
 				case .Err:
 			}
-
-			delete dialog;
 		}
 
 		public void ClearLevel() {
@@ -1415,7 +1413,7 @@ namespace SpyroScope {
 		}
 
 		void ExportTerrain() {
-			let dialog = new SaveFileDialog();
+			let dialog = scope System.IO.SaveFileDialog();
 			dialog.FileName = "terrain";
 			dialog.SetFilter(scope String() .. AppendF("Spyro Terrain (*.{0})|*.{0}|All files (*.*)|*.*", Emulator.active.installment == .SpyroTheDragon ? "s1terrain" : "sterrain"));
 			dialog.OverwritePrompt = true;
@@ -1430,8 +1428,6 @@ namespace SpyroScope {
 					}
 				case .Err:
 			}
-
-			delete dialog;
 		}
 	}
 }
